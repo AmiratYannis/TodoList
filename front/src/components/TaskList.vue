@@ -47,37 +47,44 @@
 import axios from 'axios'
 
 export default {
-  props: {
+   props: {
     tasks: {
       type: Array,
-      required: true,
+      required: true, // Ensure tasks are passed as a prop
     },
   },
   methods: {
     async fetchTasks() {
-      const response = await axios.get('http://localhost:3500/tasks');
-      this.tasks = response.data;
+      await axios.get('http://localhost:3500/tasks', {withCredentials: true})
+        .then((res)=>{
+                this.tasks = res.data;
+                console.log('Fetched tasks:', this.tasks); // Debug log
+
+
+        })
+        .catch((err)=>{
+          console.error('Error fetching tasks:', err);
+
+        })
+
     },
 
     async updateTask(index, status) {
-      /*await fetch(`http://localhost:3500/tasks/${index}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status }),
-      });*/
       const newTask = {
         name: this.tasks[index].name,
         status: status
       }
 
-      await axios.put(`http://localhost:3500/tasks/${index}`,newTask)
+      console.log('Index for update:', index);
+      console.log('Task for update:', this.tasks[index]);
+      await axios.put(`http://localhost:3500/tasks/${index}`,newTask, {withCredentials: true})
         .then((res)=>{
-              console.log(res.data)
+              console.log('Task updated successfully:', res.data);
               this.tasks[index] = { ...this.tasks[index], ...newTask };
               this.$emit('task-updated');
         })
         .catch((err)=>{
-            console.error(err.message)
+            console.error('Error updating task:', err);
         })
 
       
@@ -91,13 +98,23 @@ export default {
     },
 
     async deleteTask(index) {
-        await axios.delete(`http://localhost:3500/tasks/${index}`);
-        this.tasks.splice(index, 1);
+      console.log('Index for delete:', index);
+      console.log('Task for delete:', this.tasks[index]);
+        await axios.delete(`http://localhost:3500/tasks/${index}`, {withCredentials: true})
+          .then((res) => {
+              console.log('Task deleted successfully:', res.data);
+              this.tasks.splice(index, 1);
+          })
+          .catch((err)=>{
+            console.error('Error deleting task:', err);
+          })
+        
 
     }
   },
   mounted(){
     console.log("tasks: ",this.tasks)
+    this.fetchTasks()
   },
 };
 </script>

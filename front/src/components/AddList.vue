@@ -24,6 +24,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
@@ -33,13 +35,24 @@ export default {
   methods: {
     async addTask() {
       if (this.newTask.trim() === '') return;
-      await fetch('http://localhost:3500/tasks', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: this.newTask }),
-      });
-      this.newTask = '';
-      this.$emit('task-added');
+        console.log(this.newTask)
+
+      await axios.post('http://localhost:3500/tasks', {
+          name: this.newTask, // Send task name in the request body
+        }, {  withCredentials: true })
+        .then((response) => {
+          if (response.status === 201) {
+            const addedTask = response.data; // Get the new task from the response
+            console.log('Task added successfully:', addedTask);
+            this.$emit('task-added', addedTask); // Emit the new task to the parent
+            this.newTask = ''; // Clear the input field
+          } else {
+            console.error('Failed to add task:', response.status);
+          }
+        })
+        .catch((error) => {
+          console.error('Error adding task:', error);
+        });
     },
   },
 };
