@@ -16,13 +16,13 @@ npm install
 
 ### Compiles and hot-reloads for development
 
-Before run front-end, you have to run back-end on another terminal in folder back by using this following command: 
+Before run front-end, you have to run back-end developped in Node JS on another terminal in folder back by using this following command: 
 
 ```
 npm run dev
 ```
 
-And then you can run the same command on folder front to run the  apps of todo-list.  
+And then you can run the same command on folder front to run the full  ap of todo-list.  
 
 ### Compiles and minifies for production
 
