@@ -24,6 +24,15 @@ npm run dev
 
 And then you can run the same command on folder front to run the full  ap of todo-list.  
 
+### Test
+
+To test API Rest of back-end developped in NodeJS, you have to run this following command in folder back to check if all tests of API Rest passed. 
+I used Jest and Supertest to test API REST to check if the request GET, POST, PUT and DELETE work correctly.
+
+```
+npm test
+```
+
 ### Compiles and minifies for production
 
 To build project for production, you have to use the following command: 

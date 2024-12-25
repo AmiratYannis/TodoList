@@ -26,8 +26,6 @@ app.use(
 );
 
 app.use((req, res, next) => {
-    console.log('Session ID:', req.sessionID);
-    console.log('Current session tasks:', req.session.tasks); // Debug log
     if (!req.session.tasks) {
         req.session.tasks = []; // Only initialize if it does not exist
     }
@@ -36,7 +34,6 @@ app.use((req, res, next) => {
 
 
 app.get('/tasks', (req, res) => {
-    console.log('Fetching tasks from session:', req.session.tasks);
     res.json(req.session.tasks);
 });
 
@@ -50,8 +47,6 @@ app.post('/tasks', (req, res) => {
 
     // Add the new task to the session
     req.session.tasks.push(newTask);
-    console.log('Task added:', newTask);
-    console.log('Updated session tasks:', req.session.tasks);
 
     // Return the newly added task
     res.status(201).json(newTask);
@@ -59,8 +54,7 @@ app.post('/tasks', (req, res) => {
 
 app.put('/tasks/:index', (req, res) => {
     const index = parseInt(req.params.index, 10);
-    console.log('Received index for update request:', index);
-    console.log('Tasks in session before update:', req.session.tasks);
+    
 
     if (index < 0 || index >= req.session.tasks.length || isNaN(index)) {
         return res.status(404).send('Task not found');
@@ -71,14 +65,11 @@ app.put('/tasks/:index', (req, res) => {
     task.status = req.body.status;
     req.session.tasks[index] = task;
 
-    console.log('Tasks in session after update:', req.session.tasks);
     res.status(201).json({ message: 'Task updated successfully' });
 });
 
 app.delete('/tasks/:index', (req, res) => {
     const index = parseInt(req.params.index, 10);
-    console.log('Received index for delete request:', index);
-    console.log('Tasks in session before delete:', req.session.tasks);
 
     if (index < 0 || index >= req.session.tasks.length || isNaN(index)) {
         return res.status(404).send('Task not found');
@@ -86,10 +77,12 @@ app.delete('/tasks/:index', (req, res) => {
 
     req.session.tasks.splice(index, 1);
 
-    console.log('Tasks in session after delete:', req.session.tasks);
     res.status(200).json({ message: 'Task deleted successfully' });
 });
 
 app.listen(port, () => {
     console.log(`NodeJS server running at http://localhost:${port}`)
 })
+
+
+module.exports =app;
