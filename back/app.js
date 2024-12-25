@@ -7,27 +7,27 @@ const app = express()
 const port = 3500
 
 app.use(cors({
-    origin: 'http://localhost:5173', // Replace with your frontend's origin
-    credentials: true, // Allow credentials (cookies) to be sent
+    origin: 'http://localhost:5173', 
+    credentials: true,
 }));
 
 app.use(bodyParser.json())
 app.use(
     session({
         store: new FileStore({
-            path: './sessions', // Ensure this directory exists
-            retries: 5, // Retry saving the session if it fails
+            path: './sessions', 
+            retries: 5, 
         }),
         secret: 'keyboard cat',
-        resave: true, // Prevent unnecessary session saving
-        saveUninitialized: true, // Do not save an uninitialized session
-        cookie: { maxAge: 3600000 }, // 1-hour session expiration
+        resave: true, 
+        saveUninitialized: true, 
+        cookie: { maxAge: 3600000 }, 
     })
 );
 
 app.use((req, res, next) => {
     if (!req.session.tasks) {
-        req.session.tasks = []; // Only initialize if it does not exist
+        req.session.tasks = []; 
     }
     next();
 });
@@ -45,10 +45,8 @@ app.post('/tasks', (req, res) => {
     const { name } = req.body;
     const newTask = { name, status: 'todo' };
 
-    // Add the new task to the session
     req.session.tasks.push(newTask);
 
-    // Return the newly added task
     res.status(201).json(newTask);
 });
 

@@ -1,6 +1,5 @@
 const request = require('supertest');
-const express = require('express');
-const app = require('../app'); // Adjust the path as per your structure
+const app = require('../app');
 
 // Mock session middleware
 const session = require('express-session');
@@ -9,13 +8,13 @@ const FileStore = require('session-file-store')(session);
 app.use(
     session({
         store: new FileStore({
-            path: '../sessions', // Ensure this directory exists
-            retries: 5, // Retry saving the session if it fails
+            path: '../sessions',
+            retries: 5,
         }),
         secret: 'keyboard cat',
-        resave: true, // Prevent unnecessary session saving
-        saveUninitialized: true, // Do not save an uninitialized session
-        cookie: { maxAge: 3600000 }, // 1-hour session expiration
+        resave: true,
+        saveUninitialized: true,
+        cookie: { maxAge: 3600000 },
     })
 );
 
@@ -42,7 +41,7 @@ describe('Task Routes', () => {
     });
 
     test('PUT /tasks/:index should update an existing task', async () => {
-        // Add a task first
+        // Add a task 
         const newTask = { name: 'Task to Update' };
         await agent.post('/tasks').send(newTask);
 
@@ -54,7 +53,7 @@ describe('Task Routes', () => {
     });
 
     test('DELETE /tasks/:index should delete an existing task', async () => {
-        // Add a task first
+        // Add a task
         const newTask = { name: 'Task to Delete' };
         await agent.post('/tasks').send(newTask);
 
