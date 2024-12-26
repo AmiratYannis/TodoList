@@ -5,24 +5,31 @@ A task can be "To-do", "In progress" or "Finished".
 Each user be able to create his own list of tasks. 
 
 
-## Project setup
+
+### Development setup
+
+## Docker
+
+To run container for front-end and back-end by using Docker, you should first [install Docker](https://docs.docker.com/get-docker/). 
+
+Once Docker is installed, you can run all the container at the same time by using this following command at the root of the projet: 
+
+```
+docker-compose up
+```
 
 
-To install all of dependencies, you have enter this following command on terminal:
+
+## Node.-js
+
+Todolist is developped with Node.js and Vue.js and runs with Node.js. [Install Node.js](https://nodejs.org/en/) on your environment.
+
+Once Node.js is installed, install npm dependencies for backend (folder back) and frontend (folder front).
+
 
 ```
 npm install
 ```
-
-### Compiles and hot-reloads for development
-
-Before run front-end, you have to run back-end developped in Node JS on another terminal in folder back by using this following command: 
-
-```
-npm run dev
-```
-
-And then you can run the same command on folder front to run the full  ap of todo-list.  
 
 ### Test
 
