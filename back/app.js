@@ -6,28 +6,43 @@ const FileStore = require('session-file-store')(session);
 const app = express()
 const port = 3500
 
-app.use(cors({
-    origin: 'http://localhost:5173', 
-    credentials: true,
-}));
+app.use((req, res, next) => {
+    const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174'];
+    const origin = req.headers.origin;
+
+    if (allowedOrigins.includes(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+    }
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+    // Handle preflight requests
+    if (req.method === 'OPTIONS') {
+        return res.status(204).end();
+    }
+
+    next();
+});
+
 
 app.use(bodyParser.json())
 app.use(
     session({
         store: new FileStore({
-            path: './sessions', 
-            retries: 5, 
+            path: './sessions',
+            retries: 5,
         }),
         secret: 'keyboard cat',
-        resave: true, 
-        saveUninitialized: true, 
-        cookie: { maxAge: 3600000 }, 
+        resave: true,
+        saveUninitialized: true,
+        cookie: { maxAge: 3600000 },
     })
 );
 
 app.use((req, res, next) => {
     if (!req.session.tasks) {
-        req.session.tasks = []; 
+        req.session.tasks = [];
     }
     next();
 });
@@ -52,7 +67,7 @@ app.post('/tasks', (req, res) => {
 
 app.put('/tasks/:index', (req, res) => {
     const index = parseInt(req.params.index, 10);
-    
+
 
     if (index < 0 || index >= req.session.tasks.length || isNaN(index)) {
         return res.status(404).send('Task not found');
@@ -83,4 +98,4 @@ app.listen(port, () => {
 })
 
 
-module.exports =app;
+module.exports = app;
