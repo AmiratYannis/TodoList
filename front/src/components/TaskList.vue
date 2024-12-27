@@ -58,9 +58,6 @@ export default {
       await axios.get('http://localhost:3500/tasks', {withCredentials: true})
         .then((res)=>{
                 this.tasks = res.data;
-                console.log('Fetched tasks:', this.tasks); // Debug log
-
-
         })
         .catch((err)=>{
           console.error('Error fetching tasks:', err);
@@ -75,11 +72,8 @@ export default {
         status: status
       }
 
-      console.log('Index for update:', index);
-      console.log('Task for update:', this.tasks[index]);
       await axios.put(`http://localhost:3500/tasks/${index}`,newTask, {withCredentials: true})
         .then((res)=>{
-              console.log('Task updated successfully:', res.data);
               this.tasks[index] = { ...this.tasks[index], ...newTask };
               this.$emit('task-updated');
         })
@@ -98,11 +92,8 @@ export default {
     },
 
     async deleteTask(index) {
-      console.log('Index for delete:', index);
-      console.log('Task for delete:', this.tasks[index]);
         await axios.delete(`http://localhost:3500/tasks/${index}`, {withCredentials: true})
           .then((res) => {
-              console.log('Task deleted successfully:', res.data);
               this.tasks.splice(index, 1);
           })
           .catch((err)=>{
@@ -113,7 +104,6 @@ export default {
     }
   },
   mounted(){
-    console.log("tasks: ",this.tasks)
     this.fetchTasks()
   },
 };

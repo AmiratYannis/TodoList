@@ -35,7 +35,6 @@ export default {
   methods: {
     async addTask() {
       if (this.newTask.trim() === '') return;
-        console.log(this.newTask)
 
       await axios.post('http://localhost:3500/tasks', {
           name: this.newTask, // Send task name in the request body
@@ -43,7 +42,6 @@ export default {
         .then((response) => {
           if (response.status === 201) {
             const addedTask = response.data; // Get the new task from the response
-            console.log('Task added successfully:', addedTask);
             this.$emit('task-added', addedTask); // Emit the new task to the parent
             this.newTask = ''; // Clear the input field
           } else {
