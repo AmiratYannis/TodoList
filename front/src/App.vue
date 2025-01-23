@@ -15,7 +15,7 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      tasks: [], // Holds the list of tasks
+      tasks: [], 
     };
   },
   components: {
@@ -27,7 +27,7 @@ export default {
       axios
         .get('http://localhost:3500/tasks', { withCredentials: true })
         .then((response) => {
-          this.tasks = response.data; // Update tasks with the fetched data
+          this.tasks = response.data; 
           console.log('Fetched tasks:', this.tasks);
         })
         .catch((error) => {
@@ -35,11 +35,11 @@ export default {
         });
     },
     addTaskToList(newTask) {
-      this.tasks.push(newTask); // Add the new task to the local array
+      this.tasks.push(newTask); 
     },
   },
   mounted() {
-    this.fetchTasks(); // Fetch tasks when the component is mounted
+    this.fetchTasks(); 
   },
 };
 </script>

@@ -74,8 +74,8 @@ export default {
 
       await axios.put(`http://localhost:3500/tasks/${index}`,newTask, {withCredentials: true})
         .then((res)=>{
-              this.tasks[index] = { ...this.tasks[index], ...newTask };
-              this.$emit('task-updated');
+             this.tasks[index]=newTask;
+             this.$emit('task-updated');
         })
         .catch((err)=>{
             console.error('Error updating task:', err);

@@ -1,6 +1,6 @@
 # todo-list
 
-This is a my website to create a to-do list. 
+A todolist application that helps you track your daily tasks efficiently.
 A task can be "To-do", "In progress" or "Finished".
 Each user be able to create his own list of tasks. 
 
