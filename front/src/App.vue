@@ -1,4 +1,4 @@
-<template>
+doc<template>
   <div>
     <AddList @task-added="addTaskToList" />
     <TaskList :tasks="tasks" />
@@ -28,7 +28,6 @@ export default {
         .get('http://localhost:3500/tasks', { withCredentials: true })
         .then((response) => {
           this.tasks = response.data; 
-          console.log('Fetched tasks:', this.tasks);
         })
         .catch((error) => {
           console.error('Error fetching tasks:', error);

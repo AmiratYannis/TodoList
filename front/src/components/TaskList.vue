@@ -1,6 +1,6 @@
 <template>
     <v-list>
-        <v-subheader>Tasks</v-subheader>
+        <v-subheader class="ml-4">Tasks</v-subheader>
         <v-list-item v-for="(task, index) in tasks" :key="index">
 
             <v-list-item-content>
