@@ -5,25 +5,17 @@ const session = require('express-session')
 const FileStore = require('session-file-store')(session);
 const app = express()
 const port = 3500
+const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:3500'];
 
-app.use((req, res, next) => {
-    const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174'];
-    const origin = req.headers.origin;
 
-    if (allowedOrigins.includes(origin)) {
-        res.setHeader('Access-Control-Allow-Origin', origin);
-    }
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+app.use(cors({
+    origin: allowedOrigins,
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 
-    // Handle preflight requests
-    if (req.method === 'OPTIONS') {
-        return res.status(204).end();
-    }
+}))
 
-    next();
-});
 
 
 app.use(bodyParser.json())
@@ -34,9 +26,11 @@ app.use(
             retries: 5,
         }),
         secret: 'keyboard cat',
-        resave: true,
-        saveUninitialized: true,
-        cookie: { maxAge: 3600000 },
+        resave: false,
+        saveUninitialized: false,
+        cookie: {
+            maxAge: 3600000, secure: false, httpOnly: true, sameSite: 'lax'
+        },
     })
 );
 
@@ -93,7 +87,7 @@ app.delete('/tasks/:index', (req, res) => {
     res.status(200).json({ message: 'Task deleted successfully' });
 });
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
     console.log(`NodeJS server running at http://localhost:${port}`)
 })
 
