@@ -15,7 +15,7 @@ To run container for front-end and back-end by using Docker, you should first [i
 Once Docker is installed, you can run all the container at the same time by using this following command at the root of the projet: 
 
 ```
-docker-compose up
+docker-compose up --build
 ```
 
 
