@@ -5,7 +5,7 @@ const session = require('express-session')
 const FileStore = require('session-file-store')(session);
 const app = express()
 const port = 3500
-const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174'];
+const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174', 'http://todolist.yamirat.com'];
 
 
 app.use(cors({
