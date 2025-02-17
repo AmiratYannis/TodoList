@@ -25,7 +25,7 @@ export default {
   methods: {
     fetchTasks() {
       axios
-        .get('https://todolist.yamirat.com/api/tasks', { withCredentials: true })
+        .get('http://localhost:3500/tasks', { withCredentials: true })
         .then((response) => {
           this.tasks = response.data; 
         })
