@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const { Schema } = mongoose;
 
 const taskSchema = new Schema({
-    userID: { type: String, required: true },
+    userId: { type: String, required: true },
     name: { type: String, required: true },
     status: { type: String, default: 'todo' },
 });

@@ -54,15 +54,15 @@ app.use(session({
         mongoUrl: MONGO_URL,
     }),
     cookie: {
-        maxAge: 3600000, secure: false, httpOnly: true, sameSite: 'lax'
+        maxAge: 50 * 365 * 24 * 60 * 60 * 1000, secure: false, httpOnly: true, sameSite: 'lax'
     }
 }));
 
 
 
 app.use((req, res, next) => {
-    if (!req.session.userID) {
-        req.session.userID = crypto.createHash("sha256").update(req.ip + Date.now()).digest("hex");
+    if (!req.session.userId) {
+        req.session.userId = crypto.createHash("sha256").update(req.ip + Date.now()).digest("hex");
     }
     next();
 });
@@ -73,18 +73,18 @@ app.use((req, res, next) => {
 
 app.get('/tasks', async (req, res) => {
     try {
-        if (!req.session.userID) return res.json([]) //No session -> empty list
-        const tasks = await Task.find({ userID: req.session.userID })
+        if (!req.session.userId) return res.json([]) //No session -> empty list
+        const tasks = await Task.find({ userId: req.session.userId })
         res.json(tasks)
     } catch (err) {
         res.status(500).send("Error fetching task");
     }
 });
 
-app.get('/tasks/:userId', async (req, res) => {
+app.get('/tasks/:id', async (req, res) => {
     //res.json(req.session.tasks[req.params.index])
     try {
-        const task = await Task.findOne({ userId: req.params.userId })
+        const task = await Task.findOne({ userId: req.params.id })
 
         if (!task) {
             return res.status(404).json({ error: "Task not found" });
@@ -98,12 +98,8 @@ app.get('/tasks/:userId', async (req, res) => {
 
 app.post('/tasks', async (req, res) => {
     try {
-        console.log(req.session.userID)
         const { name } = req.body;
-        const newTask = await Task.create({ userID: req.session.userID, name: name });
-
-        //req.session.tasks.push(newTask);
-
+        const newTask = await Task.create({ userId: req.session.userId, name: name });
         res.status(201).json(newTask);
     } catch (err) {
         res.status(500).json({ error: "Error adding task" })
