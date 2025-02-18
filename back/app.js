@@ -107,32 +107,39 @@ app.post('/tasks', async (req, res) => {
 
 });
 
-app.put('/tasks/:index', (req, res) => {
-    const index = parseInt(req.params.index, 10);
+app.put('/tasks/:id', async (req, res) => {
+    try {
+        const userId = req.session.userId;
 
+        const updatedTask = await Task.findOneAndUpdate({ _id: req.params.id, userId }, req.body, { new: true });
 
-    if (index < 0 || index >= req.session.tasks.length || isNaN(index)) {
-        return res.status(404).send('Task not found');
+        if (!updatedTask) {
+            return res.status(404).send('Task not found');
+        }
+
+        res.status(201).json({ message: 'Task updated successfully' });
+    } catch (error) {
+        res.status(500).send("Error updating task");
     }
 
-    const task = req.session.tasks[index];
-    task.name = req.body.name;
-    task.status = req.body.status;
-    req.session.tasks[index] = task;
-
-    res.status(201).json({ message: 'Task updated successfully' });
 });
 
-app.delete('/tasks/:id', (req, res) => {
-    const index = parseInt(req.params.index, 10);
+app.delete('/tasks/:id', async (req, res) => {
+    try {
+        const userId = req.session.userId;
 
-    if (index < 0 || index >= req.session.tasks.length || isNaN(index)) {
-        return res.status(404).send('Task not found');
+        const deletedTask = await Task.findOneAndDelete({ _id: req.params.id, userId })
+
+        if (!deletedTask) {
+            return res.status(404).send('Task not found');
+        }
+
+
+        res.status(200).json({ message: 'Task deleted successfully' });
+    } catch (error) {
+        res.status(500).send("Error deleting task");
     }
 
-    req.session.tasks.splice(index, 1);
-
-    res.status(200).json({ message: 'Task deleted successfully' });
 });
 
 app.listen(port, '0.0.0.0', () => {

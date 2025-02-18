@@ -11,7 +11,7 @@
             <v-list-item-actions>
                 <v-btn
                 v-if="task.status === 'todo'"
-                @click="updateTask(index, 'in-progress')"
+                @click="updateTask(task._id, 'in-progress')"
                 color="warning"
                 small
                 >
@@ -19,7 +19,7 @@
                 </v-btn>
                 <v-btn
                 v-if="task.status === 'in-progress'"
-                @click="updateTask(index, 'finished')"
+                @click="updateTask(task._id, 'finished')"
                 color="success"
                 small
                 >
@@ -29,11 +29,11 @@
                     v-if="task.status==='in-progress' || task.status==='finished'"
                     color="blue-grey-lighten-2"
                     small
-                    @click="updateTask(index, 'todo')"
+                    @click="updateTask(task._id, 'todo')"
                 >
                 To-Do
                 </v-btn>
-                <v-btn color="failure" small @click="deleteTask(index)">
+                <v-btn color="failure" small @click="deleteTask(task._id)">
                     Delete
                 </v-btn>
             </v-list-item-actions>
@@ -57,7 +57,7 @@ export default {
     async fetchTasks() {
       await axios.get('http://localhost:3500/tasks', {withCredentials: true})
         .then((res)=>{
-                this.tasks = res.data;
+              this.tasks = [...res.data];
         })
         .catch((err)=>{
           console.error('Error fetching tasks:', err);
@@ -66,16 +66,28 @@ export default {
 
     },
 
-    async updateTask(index, status) {
-      const newTask = {
-        name: this.tasks[index].name,
-        status: status
-      }
+    async updateTask(taskId, status) {
+         
+      const task= this.tasks.find(task=>task._id===taskId)
+     
 
-      await axios.put(`http://localhost:3500/tasks/${index}`,newTask, {withCredentials: true})
+      const newTask = {
+        _id:taskId,
+        name: task.name,
+        status: status,
+        userId: task.userId
+      }
+ 
+
+
+      await axios.put(`http://localhost:3500/tasks/${taskId}`,newTask, {withCredentials: true})
         .then((res)=>{
-             this.tasks[index]=newTask;
-             this.$emit('task-updated');
+            const taskIndex = this.tasks.findIndex(task => task._id === taskId);
+
+            if (taskIndex !== -1) {
+              this.tasks[taskIndex] = newTask;
+            }
+            this.$emit('task-updated');
         })
         .catch((err)=>{
             console.error('Error updating task:', err);
@@ -91,10 +103,11 @@ export default {
       };
     },
 
-    async deleteTask(index) {
-        await axios.delete(`http://localhost:3500/tasks/${index}`, {withCredentials: true})
+    async deleteTask(taskId) {
+        await axios.delete(`http://localhost:3500/tasks/${taskId}`, {withCredentials: true})
           .then((res) => {
-              this.tasks.splice(index, 1);
+              const taskIndex = this.tasks.findIndex(task => task._id === taskId);
+              this.tasks.splice(taskIndex, 1);
           })
           .catch((err)=>{
             console.error('Error deleting task:', err);
