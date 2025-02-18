@@ -1,4 +1,4 @@
-version: '1.9'
+version: '3.8'
 services:
   client:
     container_name: client
@@ -18,11 +18,26 @@ services:
       dockerfile: Dockerfile
     environment:
       - NODE_ENV=production
+      - MONGO_URI=mongodb://mongo:27017/todolist
     ports:
       - "3500:3500"
+    networks:
+      - app-network
+
+  mongo:
+    image: mongo
+    container_name: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
     networks:
       - app-network
 
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  mongo-data:

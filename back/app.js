@@ -5,6 +5,8 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const cors = require('cors');
 const crypto = require('crypto'); // Generates unique user IDs
+require('dotenv').config();
+
 
 
 
@@ -14,7 +16,7 @@ const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174', 'http:
 
 const Task = require('./models/Task')
 
-const MONGO_URL = 'mongodb://localhost:27017/todolistDB';
+const MONGO_URL = process.env.MONGO_URI || "mongodb://localhost:27017/todolist";
 
 mongoose.connect(MONGO_URL)
     .then(() => console.log('Connected to MongoDB'))
@@ -31,20 +33,6 @@ app.use(cors({
 
 }))
 
-/*app.use(
-    session({
-        store: new FileStore({
-            path: './sessions',
-            retries: 5,
-        }),
-        secret: 'keyboard cat',
-        resave: false,
-        saveUninitialized: false,
-        cookie: {
-            maxAge: 3600000, secure: false, httpOnly: true, sameSite: 'lax'
-        },
-    })
-);*/
 
 app.use(session({
     secret: 'keyboard cat',
@@ -73,7 +61,7 @@ app.use((req, res, next) => {
 
 app.get('/tasks', async (req, res) => {
     try {
-        if (!req.session.userId) return res.json([]) //No session -> empty list
+        if (!req.session.userId) return res.json([])
         const tasks = await Task.find({ userId: req.session.userId })
         res.json(tasks)
     } catch (err) {
