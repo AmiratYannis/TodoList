@@ -65,7 +65,7 @@ export default {
     async addTask() {
       if (this.newTask.trim() === '') return;
 
-      await axios.post('http://localhost:3500/tasks', {
+      await axios.post('https://todolist.yamirat.com/api/tasks', {
           name: this.newTask, 
         }, {  withCredentials: true })
         .then((response) => {

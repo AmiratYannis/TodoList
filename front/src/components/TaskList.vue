@@ -55,7 +55,7 @@ export default {
   },
   methods: {
     async fetchTasks() {
-      await axios.get('http://localhost:3500/tasks', {withCredentials: true})
+      await axios.get('https://todolist.yamirat.com/api/tasks', {withCredentials: true})
         .then((res)=>{
               this.tasks = [...res.data];
         })
@@ -80,7 +80,7 @@ export default {
  
 
 
-      await axios.put(`http://localhost:3500/tasks/${taskId}`,newTask, {withCredentials: true})
+      await axios.put(`https://todolist.yamirat.com/api/tasks/${taskId}`,newTask, {withCredentials: true})
         .then((res)=>{
             const taskIndex = this.tasks.findIndex(task => task._id === taskId);
 
@@ -104,7 +104,7 @@ export default {
     },
 
     async deleteTask(taskId) {
-        await axios.delete(`http://localhost:3500/tasks/${taskId}`, {withCredentials: true})
+        await axios.delete(`https://todolist.yamirat.com/api/tasks/${taskId}`, {withCredentials: true})
           .then((res) => {
               const taskIndex = this.tasks.findIndex(task => task._id === taskId);
               this.tasks.splice(taskIndex, 1);

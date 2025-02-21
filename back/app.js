@@ -16,7 +16,7 @@ const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174', 'http:
 
 const Task = require('./models/Task')
 
-const MONGO_URL = process.env.MONGO_URI || "mongodb://localhost:27017/todolist";
+const MONGO_URL = "mongodb://mongo:27017/todolist";
 
 mongoose.connect(MONGO_URL)
     .then(() => console.log('Connected to MongoDB'))
