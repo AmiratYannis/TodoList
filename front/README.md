@@ -1,9 +1,13 @@
+# Demo
+
+You can consult my todo-list app in this link: https://todolist.yamirat.com/ 
+
 # todo-list
 
 A todolist application that helps you track your daily tasks efficiently.
 A task can be "To-do", "In progress" or "Finished".
 Each user be able to create his own list of tasks. 
-
+I developped this application in Vue JS and deployed with AWS EC2. 
 
 
 ### Development setup
